@@ -24,3 +24,15 @@ fun get_substitutions1(subs, str) =
         case all_except_option(str, x) of
             NONE => get_substitutions1(xs, str)
           | SOME ls => ls@get_substitutions1(xs, str)
+
+fun get_substitutions2(subs: string list list, s: string) =
+    let
+      fun aux(subs, s, acc) =
+        case subs of
+           [] => acc
+         | x::xs => case all_except_option(s, x) of
+            NONE => aux(xs, s, acc)
+          | SOME ls => aux(xs, s, acc@ls)
+    in
+        aux(subs, s, [])
+    end
