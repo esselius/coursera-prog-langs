@@ -36,3 +36,16 @@ fun get_substitutions2(subs: string list list, s: string) =
     in
         aux(subs, s, [])
     end
+
+(* get_subs -> {org name record} + (name list -> records) *)
+fun similar_names(names: string list list, {first: string, middle: string, last: string}) =
+    let
+        val xs = first::get_substitutions2(names, first)
+        fun aux(names, acc) =
+            case names of
+                [] => acc
+              | x::xs =>
+                ({ first=x, middle=middle, last=last })::aux(xs, acc)
+    in
+      aux(xs, [])
+    end
