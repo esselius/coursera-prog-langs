@@ -53,6 +53,7 @@ val test09x3 = what_month(100) = 4
 val test10x1 = month_range(98, 100) = [4, 4, 4]
 val test10x2 = month_range(100, 24) = []
 val test10x3 = month_range(30, 34)  = [1, 1, 2, 2, 2]
+val test10x4 = month_range(33, 34)  = [2, 2]
 
 val test11x1 = oldest([]) = NONE
 val test11x2 = oldest([(2020,1,1)]) = SOME (2020,1,1)

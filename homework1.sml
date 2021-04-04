@@ -11,30 +11,16 @@ fun is_older((y1, m1, d1), (y2, m2, d2)) =
                 false
 
 fun number_in_month(dates: (int * int * int) list, month: int) =
-    if null dates
-    then 0
-    else
-        if #2 (hd dates) = month
-        then 1 + number_in_month(tl dates, month)
-        else number_in_month(tl dates, month)
+    (List.length o List.filter (fn d => #2 d = month)) dates
 
 fun number_in_months(dates: (int * int * int) list, months: int list) =
-    if null dates orelse null months
-    then 0
-    else number_in_month(dates, hd months) + number_in_months(dates, tl months)
+    List.foldl (fn (m, acc) => acc + number_in_month(dates, m)) 0 months
 
 fun dates_in_month(dates: (int * int * int) list, month: int) =
-    if null dates
-    then []
-    else
-        if #2 (hd dates) = month
-        then (hd dates)::(dates_in_month(tl dates, month))
-        else dates_in_month(tl dates, month)
+    List.filter (fn d => #2 d = month) dates
 
 fun dates_in_months(dates: (int * int * int) list, months: int list) =
-    if null dates orelse null months
-    then []
-    else dates_in_month(dates, hd months)@dates_in_months(dates, tl months)
+    List.foldl (fn (m,acc) => acc @ dates_in_month(dates, m)) [] months
 
 fun get_nth(items: 'a list, nth: int) =
     if nth = 1
@@ -64,7 +50,7 @@ fun month_range(day1: int, day2: int) =
     if day1 > day2
     then []
     else what_month(day1)::month_range(day1+1, day2)
-            
+
 fun oldest(dates: (int * int * int) list) =
     if null dates
     then NONE

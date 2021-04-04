@@ -18,12 +18,7 @@ fun all_except_option(str, strs) =
               | SOME ls => SOME (x::ls)
 
 fun get_substitutions1(subs, str) =
-    case subs of
-        [] => []
-      | x::xs =>
-        case all_except_option(str, x) of
-            NONE => get_substitutions1(xs, str)
-          | SOME ls => ls@get_substitutions1(xs, str)
+    (List.foldl (fn (ls,acc) => acc@ls) [] o List.mapPartial (fn x => all_except_option(str, x))) subs
 
 fun get_substitutions2(subs: string list list, s: string) =
     let
@@ -37,18 +32,8 @@ fun get_substitutions2(subs: string list list, s: string) =
         aux(subs, s, [])
     end
 
-(* get_subs -> {org name record} + (name list -> records) *)
 fun similar_names(names: string list list, {first: string, middle: string, last: string}) =
-    let
-        val xs = first::get_substitutions2(names, first)
-        fun aux(names, acc) =
-            case names of
-                [] => acc
-              | x::xs =>
-                ({ first=x, middle=middle, last=last })::aux(xs, acc)
-    in
-      aux(xs, [])
-    end
+    List.map (fn n => {first=n, middle=middle, last=last}) (first::get_substitutions2(names, first))
 
 datatype suit = Clubs | Diamonds | Hearts | Spades
 datatype rank = Jack | Queen | King | Ace | Num of int 
@@ -91,14 +76,7 @@ fun all_same_color(cards) =
                 else false
 
 fun sum_cards(cards) =
-    let
-      fun aux(cards) =
-        case cards of
-            [] => 0
-          | x::xs => card_value(x) + aux(xs)
-    in
-      aux(cards)
-    end
+    List.foldl (fn (c,acc) => card_value(c)+acc) 0 cards
 
 (* sum cards -> if sum > goal then score = 3 x (sum - goal) else goal - sum, if same color -> div 2 *)
 fun score(cards, goal) =
