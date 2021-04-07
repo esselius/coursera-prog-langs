@@ -88,3 +88,22 @@ val count_wildcards = g (fn _ => 1) (fn _ => 0)
 val count_wild_and_variable_lengths = g (fn _ => 1) (fn x => String.size x)
 
 val count_some_var = fn (x,p) => g (fn _ => 0) (fn y => if x = y then 1 else 0) p
+
+fun check_pat p =
+    let
+        fun vars(p, acc) =
+            case p of
+                Variable x => x::acc
+              | ConstructorP(_, p) => vars(p, acc)
+              | TupleP ps => List.foldl (fn (p, acc) => vars(p, []) @ acc) [] ps
+              | _ => []
+        fun noRepeats(ps) =
+            case ps of
+                [] => true
+              | x::xs =>
+                  if List.exists (fn y => x = y) xs
+                  then false
+                  else noRepeats(xs)
+    in
+      (noRepeats o vars)(p, [])
+    end

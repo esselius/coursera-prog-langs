@@ -39,3 +39,8 @@ val test9Bx1 = count_wild_and_variable_lengths (TupleP [Wildcard, Variable "abc"
 val test9Cx1 = count_some_var("hey", Variable "you") = 0
 val test9Cx2 = count_some_var("hey", TupleP [Wildcard, Variable "hey", TupleP [Variable "hey"]]) = 2
 val test9Cx3 = count_some_var("hey", Wildcard) = 0
+
+val test10x1 = check_pat (Variable "hi") = true
+val test10x2 = check_pat (TupleP [Variable "hi"]) = true
+val test10x3 = check_pat (TupleP [Variable "hi", Variable "hi"]) = false
+val test10x4 = check_pat (TupleP [Variable "hi", Variable "hey"]) = true
