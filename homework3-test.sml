@@ -44,3 +44,7 @@ val test10x1 = check_pat (Variable "hi") = true
 val test10x2 = check_pat (TupleP [Variable "hi"]) = true
 val test10x3 = check_pat (TupleP [Variable "hi", Variable "hi"]) = false
 val test10x4 = check_pat (TupleP [Variable "hi", Variable "hey"]) = true
+
+val test11x1 = match(Const(0), UnitP) = NONE
+val test11x2 = match(Const(0), Wildcard) = SOME []
+val test11x3 = match(Const(0), Variable("a")) = SOME [("a", Const(0))]

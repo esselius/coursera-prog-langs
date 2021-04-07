@@ -107,3 +107,9 @@ fun check_pat p =
     in
       (noRepeats o vars)(p, [])
     end
+
+    fun match(v: valu, p: pattern): (string * valu) list option =
+        case p of
+            UnitP => NONE
+          | Wildcard => SOME []
+          | Variable x => SOME [(x, v)]
